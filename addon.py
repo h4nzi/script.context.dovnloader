@@ -102,7 +102,7 @@ def download(url, custom_filename):
             dialog.update(
                 int(file_size_dl * 100 / file_size) if file_size > 0 else 0,
                 "Velikost:  " + convert_size(file_size) + "\n" +
-                "Staženo:  " + status + "     Rychlost: " + speed + " Mb/s\n" +
+                "Staženo:  " + status + "     Rychlost: " + speed + " MB/s\n" +
                 "Název: " + filename
             )
     except Exception as e:
