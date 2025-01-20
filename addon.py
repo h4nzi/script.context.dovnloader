@@ -56,8 +56,8 @@ def download(url):
     start = time.time()
     if addon.getSetting("debug") == "true":
         Msg(f"[Webshare Downloader]: {u}")
-        Msg(f"[Webshare Downloader size: {file_size}")
-        Msg(f"[Webshare Downloader filename: {filename}")
+        Msg(f"[Webshare Downloader] size: {file_size} Bytes")
+        Msg(f"[Webshare Downloader] filename: {filename}")
     while True:
         if dialog.iscanceled():
             canceled = True
@@ -70,7 +70,13 @@ def download(url):
         status = status + chr(8)*(len(status)+1)
         done = int(50 * file_size_dl / file_size)
         speed = "%s" % round((file_size_dl//(time.time() - start) / 100000), 1)
-        dialog.update(int(file_size_dl*100 /file_size), "Velikost:  " + convert_size(file_size) + "\n" + "Staženo:  " + status + "     Rychlost: " + speed + " Mb/s\n" + filename)
+        dialog.update(
+            int(file_size_dl * 100 / file_size), 
+            "Velikost:  " + convert_size(file_size) + "\n" +
+            "Staženo:  " + status + "     Rychlost: " + speed + " Mb/s\n" +
+            "Název: " + filename
+        )
+
     f.close()
     dialog.close()
     if canceled == False:
@@ -91,15 +97,18 @@ def main():
     player.play(path, listitem)
     time.sleep(5)
     while True:
-        try:
-            url = player.getPlayingFile()
-            if url:
-                break
-        except:
-            pass
+        if player.isPlaying():
+            try:
+                url = player.getPlayingFile()
+                if url:
+                    break
+            except Exception as e:
+                xbmc.log(f"Error while getting playing file: {str(e)}", level=xbmc.LOGERROR)
+        else:
+            xbmc.log("Player is not currently playing.", level=xbmc.LOGDEBUG)
+        time.sleep(0.1)  # Pauza mezi pokusy
     player.stop()
     download(url.split("|")[0])
-
 
 if (__name__ == "__main__"):
     main()
