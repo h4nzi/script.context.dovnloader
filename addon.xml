@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.context.downloader" name="Video Downloader" version="1.0.3" provider-name="Sároš, jkmh">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+    </requires>
+    <extension point="kodi.context.item">
+        <menu id="kodi.core.main">
+            <item library="addon.py">
+                <label>Download video</label>
+                <visible>String.IsEqual(ListItem.dbtype,episode)|String.IsEqual(ListItem.dbtype,movie)|Container.Content(movies)|Container.Content(episodes)</visible>
+            </item>
+        </menu>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Download Video from Plugins</summary>
+        <platform>all</platform>
+        <assets>
+            <icon>icon.png</icon>
+        </assets>
+    </extension>
+</addon>
