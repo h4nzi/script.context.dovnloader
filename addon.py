@@ -42,22 +42,23 @@ def convert_size(number_of_bytes):
     return str(number_of_bytes) + ' ' + unit
 
 
-def download(url):
+def download(url, custom_filename):
     dialog = xbmcgui.DialogProgress()
     u = urlopen(url)
     meta = u.info()
     file_size = int(meta.get("Content-length"))
-    filename = os.path.basename(urlparse(url).path)
+    filename = custom_filename if custom_filename else os.path.basename(urlparse(url).path)
     f = xbmcvfs.File(folder + filename, 'w')
-    dialog.create("Video Downloader","Stahování...")
+    dialog.create("Video Downloader", "Stahování...")
     file_size_dl = 0
     block_sz = 4096
     canceled = False
     start = time.time()
     if addon.getSetting("debug") == "true":
-        Msg(f"[Webshare Downloader]: {u}")
+        Msg(f"[Webshare Downloader] u : {u}")
         Msg(f"[Webshare Downloader] size: {file_size} Bytes")
         Msg(f"[Webshare Downloader] filename: {filename}")
+        Msg(f"[Webshare Downloader] f: {f}")
     while True:
         if dialog.iscanceled():
             canceled = True
@@ -71,7 +72,7 @@ def download(url):
         done = int(50 * file_size_dl / file_size)
         speed = "%s" % round((file_size_dl//(time.time() - start) / 100000), 1)
         dialog.update(
-            int(file_size_dl * 100 / file_size), 
+            int(file_size_dl * 100 / file_size),
             "Velikost:  " + convert_size(file_size) + "\n" +
             "Staženo:  " + status + "     Rychlost: " + speed + " Mb/s\n" +
             "Název: " + filename
@@ -79,7 +80,7 @@ def download(url):
 
     f.close()
     dialog.close()
-    if canceled == False:
+    if not canceled:
         yes = xbmcgui.Dialog().yesno('Video Downloader', 'Hotovo. Přehrát video?')
         if yes:
             path = folder + filename
@@ -92,6 +93,9 @@ def download(url):
 
 def main():
     path = xbmc.getInfoLabel('ListItem.FileNameAndPath')
+    custom_label = xbmc.getInfoLabel("Skin.String(ShowCustomLabel)")
+    if not custom_label:
+        custom_label = xbmc.getInfoLabel("ListItem.Label")
     listitem = xbmcgui.ListItem(path=path)
     player = xbmc.Player()
     player.play(path, listitem)
@@ -106,9 +110,10 @@ def main():
                 xbmc.log(f"Error while getting playing file: {str(e)}", level=xbmc.LOGERROR)
         else:
             xbmc.log("Player is not currently playing.", level=xbmc.LOGDEBUG)
-        time.sleep(0.1)  # Pauza mezi pokusy
+        time.sleep(0.1)
     player.stop()
-    download(url.split("|")[0])
+    download(url.split("|")[0], custom_label)
+
 
 if (__name__ == "__main__"):
     main()
