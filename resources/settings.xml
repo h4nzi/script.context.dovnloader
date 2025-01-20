@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="Stahování">
+        <setting label="Složka" type="folder" id="folder" default =""/>
+    </category>
+	<category label="Expert">
+		<setting type="lsep" label="Debug"/>
+		<setting id="debug" type="bool" label="Protokolování" default="false" visible="true"/>
+	</category>
+</settings>
