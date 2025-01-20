@@ -1,3 +1,7 @@
+v1.0.3
+- odstranění formátovacích značek a nepovolených znaků
+
+
 v1.0.2
 - oprava tvaru názvu proměnnou custom_label
 
