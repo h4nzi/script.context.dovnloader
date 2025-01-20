@@ -1,15 +1,2 @@
-v1.0.3
-- odstranění formátovacích značek a nepovolených znaků
-
-
-v1.0.2
-- oprava tvaru názvu proměnnou custom_label
-
-v1.0.1
-- zlepšení čitelnosti logů a dialogů
-- robustnější zpracování chyb a stavů přehrávače
-- snížení zátěže procesoru
-- přehlednější a strukturovanější kód
-
 v1.0.0
 - init
